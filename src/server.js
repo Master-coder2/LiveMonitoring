@@ -17,7 +17,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 // having a public dir
-const publicDir = path.join(__dirname, "../public");
+const publicDir = path.join(__dirname, "../Public");
 const viewDir = path.join(__dirname + "/views");
 console.log(viewDir);
 // configuring express
