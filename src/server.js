@@ -13,7 +13,7 @@ const speechToTexts = require("../api/speechToText");
 const app = express();
 
 // getting app
-const port = process.env.PORT | 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 // having a public dir
