@@ -55,7 +55,7 @@ const run = async (buffer) => {
   if (results.length == 0) {
     return 0;
   } else {
-    console.log(results[0].detection._score);
+    //  console.log(results[0].detection._score);
     return results[0].detection._score;
   }
 };

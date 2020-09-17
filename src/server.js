@@ -19,7 +19,6 @@ app.use(express.json());
 // having a public dir
 const publicDir = path.join(__dirname, "../Public");
 const viewDir = path.join(__dirname + "/views");
-console.log(viewDir);
 // configuring express
 app.use(express.static(publicDir));
 app.set("view engine", "hbs");
@@ -43,7 +42,6 @@ app.post("/img", upload.single("img"), async (req, res) => {
       } else {
         cnt = 0;
       }
-      console.log(data + " " + cnt);
       if (cnt == 3) {
         res.send("notactive");
       } else {
@@ -58,7 +56,7 @@ app.post("/img", upload.single("img"), async (req, res) => {
 const sound = multer();
 
 app.post("/uploadSound", sound.any(), (req, res) => {
-  console.log(req.files[0]);
+  // console.log(req.files[0]);
   speechToTexts(req.files[0].buffer, (data) => {
     res.send(data);
   });

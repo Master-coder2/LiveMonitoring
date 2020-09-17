@@ -20,16 +20,18 @@ const speechToTexts = async (audioBuffer, callback) => {
     .then((speechRecognitionResults) => {
       const data = JSON.stringify(speechRecognitionResults, null, 2);
       if (!data) {
-        callback("error");
+        return callback("error");
       }
-      console.log(
+      // console.log(
+      //   JSON.parse(data).result.results[0].alternatives[0].transcript
+      // );
+      // console.log("hi");
+      return callback(
         JSON.parse(data).result.results[0].alternatives[0].transcript
       );
-      // console.log("hi");
-      callback(JSON.parse(data).result.results[0].alternatives[0].transcript);
     })
     .catch((err) => {
-      console.log("error:", err);
+      // console.log("error:", err);
       callback("error");
     });
 };
