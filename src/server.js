@@ -33,8 +33,6 @@ app.get("/notactive", (req, res) => {
   res.render("index", { randomNumber: Math.floor(Math.random() * 10) + 1 });
 });
 app.post("/img", upload.single("img"), async (req, res) => {
-  console.log(req.file);
-  //res.send("hi");
   if (!req.file) {
     res.send("Intternal error");
   } else {
@@ -52,7 +50,7 @@ app.post("/img", upload.single("img"), async (req, res) => {
         res.send("active" + cnt);
       }
     } catch (err) {
-      res.send(500).send("inertnal error");
+      res.status(500).send("inertnal error");
     }
   }
 });
