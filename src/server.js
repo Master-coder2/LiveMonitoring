@@ -26,6 +26,9 @@ app.set("view engine", "hbs");
 app.set("views", viewDir);
 const upload = multer();
 let cnt = 0;
+app.get("/", (req, res) => {
+  res.render("start");
+});
 app.get("/notactive", (req, res) => {
   res.render("index", { randomNumber: Math.floor(Math.random() * 10) + 1 });
 });
