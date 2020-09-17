@@ -40,13 +40,13 @@ function saveFile(fileName, buf) {
   fs.writeFileSync(path.resolve(baseDir, fileName), buf);
 }
 
-const run = async () => {
+const run = async (buffer) => {
   // load weights
   await faceDetectionNet.loadFromDisk("weights");
   await faceapi.nets.faceLandmark68Net.loadFromDisk("weights");
 
   // load the image
-  const img = await canvas.loadImage("output.png");
+  const img = await canvas.loadImage(buffer);
 
   // detect the faces with landmarks
   const results = await faceapi

@@ -49,12 +49,17 @@ const sendData = (base64) => {
   const config = {
     headers: { "Content-Type": "multipart/form-data" },
   };
-  axios.post("/img", data, config).then((response) => {
-    console.log(response.data);
-    if (response.data == "notactive") {
-      console.log("ih");
-      location.replace("/notactive");
-    }
-    return response.data;
-  });
+  axios
+    .post("/img", data, config)
+    .then((response) => {
+      console.log(response.data);
+      if (response.data == "notactive") {
+        console.log("ih");
+        location.replace("/notactive");
+      }
+      return response.data;
+    })
+    .catch(() => {
+      console.log("error");
+    });
 };

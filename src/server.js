@@ -32,28 +32,29 @@ app.get("/", (req, res) => {
 app.get("/notactive", (req, res) => {
   res.render("index", { randomNumber: Math.floor(Math.random() * 10) + 1 });
 });
-app.post("/img", upload.single("img"), (req, res) => {
-  // console.log(req.file);
-  sharp(req.file.buffer)
-    .resize(320, 240)
-    .toFile("output.png", async (err, info) => {
-      if (!err) {
-        const data = await run();
-        if (data === 0) {
-          cnt++;
-        } else {
-          cnt = 0;
-        }
-        console.log(data + " " + cnt);
-        if (cnt == 3) {
-          res.send("notactive");
-        } else {
-          res.send("active" + cnt);
-        }
+app.post("/img", upload.single("img"), async (req, res) => {
+  console.log(req.file);
+  //res.send("hi");
+  if (!req.file) {
+    res.send("Intternal error");
+  } else {
+    try {
+      const data = await run(req.file.buffer);
+      if (data === 0) {
+        cnt++;
       } else {
-        res.send("error");
+        cnt = 0;
       }
-    });
+      console.log(data + " " + cnt);
+      if (cnt == 3) {
+        res.send("notactive");
+      } else {
+        res.send("active" + cnt);
+      }
+    } catch (err) {
+      res.send(500).send("inertnal error");
+    }
+  }
 });
 
 const sound = multer();
