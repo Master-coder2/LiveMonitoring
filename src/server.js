@@ -32,20 +32,22 @@ app.get("/notactive", (req, res) => {
   res.render("index", { randomNumber: Math.floor(Math.random() * 10) + 1 });
 });
 app.post("/img", upload.single("img"), async (req, res) => {
+  let inActiveTime = req.body.inActiveTime;
+  const no = req.body.no;
   if (!req.file) {
     res.send("Intternal error");
   } else {
     try {
       const data = await run(req.file.buffer);
       if (data === 0) {
-        cnt++;
+        inActiveTime++;
       } else {
-        cnt = 0;
+        inActiveTime = 0;
       }
-      if (cnt == 3) {
-        res.send("notactive");
+      if (inActiveTime == 3) {
+        res.send({ msg: "notactive", inActiveTime: inActiveTime, no });
       } else {
-        res.send("active" + cnt);
+        res.send({ msg: "active", inActiveTime: inActiveTime, no });
       }
     } catch (err) {
       res.status(500).send("inertnal error");
