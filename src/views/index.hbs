@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Speech to text test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/cerulean/bootstrap.min.css">
+</head>
+
+<body style="padding:50px;">
+  <h1>You seem to in active for long time please say this to show your presence</h1>
+  <h2 id="randomNumber">{{randomNumber}}</h2>
+  <div id="controls">
+    <button id="recordButton">Record</button>
+    <button id="transcribeButton" disabled>Get transcription</button>
+  </div>
+  <div id="output"></div>
+  <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+  <script src="speech.js"></script>
+</body>
+
+</html>

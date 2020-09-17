@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+h2 {
+  color: red;
+  margin: 10px;
+}
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#video {
+  width: 100%;
+}
+#canvas {
+  display: none;
+}
+#img {
+  display: none;
+}
