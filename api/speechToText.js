@@ -19,6 +19,9 @@ const speechToTexts = async (audioBuffer, callback) => {
     .recognize(recognizeParams)
     .then((speechRecognitionResults) => {
       const data = JSON.stringify(speechRecognitionResults, null, 2);
+      if (!data) {
+        callback("error");
+      }
       console.log(
         JSON.parse(data).result.results[0].alternatives[0].transcript
       );

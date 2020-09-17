@@ -48,7 +48,7 @@ app.post("/img", upload.single("img"), (req, res) => {
         if (cnt == 3) {
           res.send("notactive");
         } else {
-          res.send("active");
+          res.send("active" + cnt);
         }
       } else {
         res.send("error");
