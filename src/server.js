@@ -1,12 +1,13 @@
 // importing inbuild modules
 const path = require("path");
 const fs = require("fs");
+
 // importing npm modules
 const express = require("express");
 const multer = require("multer");
 const sharp = require("sharp");
+
 //importing self module
-//const run = require("./app.js");
 const { run, isMatch } = require("./exp.js");
 const speechToTexts = require("../api/speechToText");
 const FaceMatching = require("../api/FaceMatching");
@@ -14,28 +15,39 @@ const FaceMatching = require("../api/FaceMatching");
 // initializing express app
 const app = express();
 
-// getting app
+// getting env variables
 const port = process.env.PORT || 3000;
 
-app.use(express.json());
-// having a public dir
+// having a custom dir
 const publicDir = path.join(__dirname, "../Public");
 const viewDir = path.join(__dirname + "/views");
+
 // configuring express
+app.use(express.json());
 app.use(express.static(publicDir));
 app.set("view engine", "hbs");
 app.set("views", viewDir);
+
+//multer for image and sound
 const upload = multer();
-let cnt = 0;
+const sound = multer();
+
+// start page
 app.get("/", (req, res) => {
   res.render("start");
 });
+
+// When we found different person
 app.get("/different", (req, res) => {
   res.render("different");
 });
+
+//When person found inactive
 app.get("/notactive", (req, res) => {
   res.render("index", { randomNumber: Math.floor(Math.random() * 10) + 1 });
 });
+
+//when user give img to server
 app.post("/img", upload.single("img"), async (req, res) => {
   let inActiveTime = req.body.inActiveTime;
   let imageSave = req.body.imageSave;
@@ -85,8 +97,7 @@ app.post("/img", upload.single("img"), async (req, res) => {
   }
 });
 
-const sound = multer();
-
+// when user upload sound
 app.post("/uploadSound", sound.any(), (req, res) => {
   // console.log(req.files[0]);
   speechToTexts(req.files[0].buffer, (data) => {

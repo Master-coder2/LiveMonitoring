@@ -13,7 +13,6 @@ const run = async () => {
     })
     .then((stream) => {
       video.srcObject = stream;
-
       video.play();
       canvas.width = video.width;
       canvas.height = video.height;
