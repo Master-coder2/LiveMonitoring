@@ -6,8 +6,10 @@ const express = require("express");
 const multer = require("multer");
 const sharp = require("sharp");
 //importing self module
-const run = require("./app.js");
+//const run = require("./app.js");
+const { run, isMatch } = require("./exp.js");
 const speechToTexts = require("../api/speechToText");
+const FaceMatching = require("../api/FaceMatching");
 
 // initializing express app
 const app = express();
@@ -28,29 +30,57 @@ let cnt = 0;
 app.get("/", (req, res) => {
   res.render("start");
 });
+app.get("/different", (req, res) => {
+  res.render("different");
+});
 app.get("/notactive", (req, res) => {
   res.render("index", { randomNumber: Math.floor(Math.random() * 10) + 1 });
 });
 app.post("/img", upload.single("img"), async (req, res) => {
   let inActiveTime = req.body.inActiveTime;
+  let imageSave = req.body.imageSave;
+  let matchCnt = req.body.matchCnt;
   const no = req.body.no;
   if (!req.file) {
     res.send("Intternal error");
   } else {
     try {
-      const data = await run(req.file.buffer);
+      await sharp(req.file.buffer).resize(320, 240).toFile(`new${no}.png`);
+      const data = await run(no);
       if (data === 0) {
         inActiveTime++;
       } else {
         inActiveTime = 0;
+        if (imageSave == "false") {
+          console.log("hi");
+          await sharp(req.file.buffer).resize(320, 240).toFile(`${no}.png`);
+          imageSave = true;
+        }
+        if (imageSave == "true") {
+          const match = await isMatch(no);
+          if (match != "match") {
+            matchCnt++;
+          } else {
+            matchCnt = 0;
+          }
+        }
       }
+      let msg = "active";
       if (inActiveTime == 3) {
-        res.send({ msg: "notactive", inActiveTime: inActiveTime, no });
-      } else {
-        res.send({ msg: "active", inActiveTime: inActiveTime, no });
+        msg = "notactive";
       }
+      if (matchCnt == 3) {
+        msg = "different";
+      }
+      res.send({
+        msg,
+        inActiveTime,
+        no,
+        imageSave,
+        matchCnt,
+      });
     } catch (err) {
-      res.status(500).send("inertnal error");
+      res.status(500).send(err);
     }
   }
 });

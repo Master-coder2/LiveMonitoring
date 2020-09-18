@@ -19,12 +19,16 @@ const run = async () => {
       canvas.height = video.height;
       const context = canvas.getContext("2d");
       let inActiveTime = 0;
+      let matchCnt = 0;
+      let imageSave = "false";
       video.addEventListener("play", async () => {
         const drawImage = async () => {
           context.drawImage(video, 0, 0, canvas.width, canvas.height);
           const src = canvas.toDataURL("image/png");
-          sendData(src, inActiveTime, (data) => {
-            inActiveTime = data;
+          sendData(src, inActiveTime, imageSave, matchCnt, (data) => {
+            inActiveTime = data.inActiveTime;
+            imageSave = data.imageSave;
+            matchCnt = data.matchCnt;
             setTimeout(drawImage, 1000 * 10);
           });
         };
@@ -34,7 +38,7 @@ const run = async () => {
     .catch((err) => {
       console.log("An error occurred: " + err);
     });
-  const sendData = (base64, inActiveTime, callback) => {
+  const sendData = (base64, inActiveTime, imageSave, matchCnt, callback) => {
     const dataURLtoFile = (dataurl, filename) => {
       const arr = dataurl.split(",");
       const mime = arr[0].match(/:(.*?);/)[1];
@@ -51,20 +55,28 @@ const run = async () => {
     const data = new FormData();
     data.append("img", file, file.name);
     data.append("inActiveTime", inActiveTime);
+    data.append("imageSave", imageSave);
+    data.append("matchCnt", matchCnt);
     data.append("no", x);
     const config = {
       headers: { "Content-Type": "multipart/form-data" },
     };
+
     axios
       .post("/img", data, config)
       .then((response) => {
         console.log(response.data);
         inActiveTime = response.data.inActiveTime;
+        imageSave = response.data.imageSave;
+        matchCnt = response.data.matchCnt;
         if (response.data.msg == "notactive") {
           console.log("ih");
           location.replace("/notactive");
         }
-        callback(inActiveTime);
+        if (response.data.msg == "different") {
+          location.replace("/different");
+        }
+        callback({ inActiveTime, imageSave, matchCnt });
       })
       .catch(() => {
         console.log("error");
